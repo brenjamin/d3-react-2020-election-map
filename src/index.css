@@ -1,0 +1,56 @@
+body {
+  background-color: #e5e2e0;
+  font-family: 'Roboto', sans-serif;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 3rem;
+}
+
+.svg-wrapper,
+#tooltip {
+  background-color: white;
+  padding: 2rem 4rem;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#title {
+  font-size: 1.75rem;
+}
+
+#description {
+  font-size: 1.25rem;
+}
+
+#tooltip {
+  padding: 0.5rem;
+  position: absolute;
+  transition: opacity 0.2s, visibility 0.2s;
+  font-size: 0.75rem;
+  color: white;
+  background-color: black;
+  text-align: center;
+}
+
+.state {
+  cursor: pointer;
+}
+
+.state:hover {
+  stroke: black;
+  z-index: 1;
+}
+
+.source {
+  text-align: right;
+  margin-top: 32px;
+}
+
+.tick {
+  font-size: 0.75rem;
+}

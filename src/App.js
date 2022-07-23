@@ -1,10 +1,8 @@
 import './App.css'
-import { useData } from './utils/useData'
 import { useUSMap } from './utils/useUSMap'
-import { ChoroplethMap } from './components/ChoroplethMap'
+import { ElectionMap } from './components/ElectionMap'
 import { useCountyData } from './utils/useCountyData'
 import { useStateData } from './utils/useStateData'
-import { count } from 'd3'
 import StateContext from './StateContext'
 import DispatchContext from './DispatchContext'
 import { useImmerReducer } from 'use-immer'
@@ -18,7 +16,11 @@ const App = () => {
   const stateData = useStateData()
 
   const initialState = {
-    hoveredState: null,
+    hoveredState: {
+      id: '04',
+      x: 500,
+      y: 400
+    },
     hoveredCounty: null,
     activeState: null,
     zoomLevel: 0
@@ -27,7 +29,11 @@ const App = () => {
   function reducer(draft, action) {
     switch (action.type) {
       case 'updateHoveredState':
-        draft.hoveredState = action.value
+        draft.hoveredState = {
+          id: action.value.id,
+          x: action.value.x,
+          y: action.value.y
+        }
         return
       case 'updateHoveredCounty':
         return
@@ -55,7 +61,7 @@ const App = () => {
         </p>
         <StateContext.Provider value={state}>
           <DispatchContext.Provider value={dispatch}>
-            <ChoroplethMap
+            <ElectionMap
               width={width}
               height={height}
               stateData={stateData}

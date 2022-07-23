@@ -1,3 +1,8 @@
+:root {
+  --blue: #1375b7;
+  --red: #c93135;
+}
+
 body {
   background-color: #e5e2e0;
   font-family: 'Roboto', sans-serif;
@@ -19,6 +24,11 @@ main {
   text-align: center;
 }
 
+.svg-wrapper {
+  flex: 1;
+  max-width: 1024px;
+}
+
 #title {
   font-size: 1.75rem;
 }
@@ -37,13 +47,35 @@ main {
   text-align: center;
 }
 
-.state {
+.state-wrapper,
+.county {
   cursor: pointer;
 }
 
-.state:hover {
-  stroke: black;
-  z-index: 1;
+.state-wrapper.active {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.state.dem {
+  fill: var(--blue);
+}
+
+.state.gop {
+  fill: var(--red);
+}
+
+.state.dem.flip {
+  fill: url(#dem-flip);
+}
+
+.state.gop.flip {
+  fill: url(#gop-flip);
+}
+
+.state-name {
+  fill: white;
+  font-size: 13px;
 }
 
 .source {

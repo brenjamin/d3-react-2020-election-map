@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { json } from 'd3'
-import { feature, mesh } from 'topojson'
+import { feature } from 'topojson'
 
 export const useUSMap = () => {
   const url =
@@ -9,7 +9,7 @@ export const useUSMap = () => {
   useEffect(() => {
     json(url).then(data => {
       const { counties, states } = data.objects
-
+      console.log('memo')
       setData({
         counties: feature(data, counties),
         states: feature(data, states)

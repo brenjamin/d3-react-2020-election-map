@@ -1,8 +1,7 @@
 import { StateMarks } from './StateMarks'
 import { CountyMarks } from './CountyMarks'
-import { StateTooltip } from './StateTooltip'
 import { select, scaleThreshold, count } from 'd3'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Legend } from './Legend'
 
 export const ElectionMap = ({
@@ -12,12 +11,6 @@ export const ElectionMap = ({
   countyData,
   usMap
 }) => {
-  const [hoveredState, setHoveredState] = useState({
-    id: null,
-    x: null,
-    y: null
-  })
-
   const demScale = useMemo(
     () =>
       scaleThreshold()
@@ -67,7 +60,6 @@ export const ElectionMap = ({
 
   return (
     <>
-      <StateTooltip hoveredState={hoveredState} stateData={stateData} />
       <svg
         width="100%"
         height="100%"

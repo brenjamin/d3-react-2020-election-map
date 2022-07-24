@@ -1,4 +1,3 @@
-import './App.css'
 import { useUSMap } from './utils/useUSMap'
 import { ElectionMap } from './components/ElectionMap'
 import { useCountyData } from './utils/useCountyData'
@@ -6,6 +5,10 @@ import { useStateData } from './utils/useStateData'
 import StateContext from './StateContext'
 import DispatchContext from './DispatchContext'
 import { useImmerReducer } from 'use-immer'
+import { StateTooltip } from './components/StateTooltip'
+import { CountyTooltip } from './components/CountyTooltip'
+
+import { ZoomControls } from './components/ZoomControls'
 
 const width = 960
 const height = 600
@@ -17,11 +20,15 @@ const App = () => {
 
   const initialState = {
     hoveredState: {
-      id: '04',
-      x: 500,
-      y: 400
+      id: '06',
+      x: 300,
+      y: 300
     },
-    hoveredCounty: null,
+    hoveredCounty: {
+      id: null,
+      x: null,
+      y: null
+    },
     activeState: null,
     zoomLevel: 0
   }
@@ -36,13 +43,30 @@ const App = () => {
         }
         return
       case 'updateHoveredCounty':
+        draft.hoveredCounty = {
+          id: action.value.id,
+          x: action.value.x,
+          y: action.value.y
+        }
         return
       case 'updateActiveState':
         draft.activeState = action.value
         return
       case 'increaseZoomLevel':
+        console.log('current zoom level ', draft.zoomLevel)
+        if (draft.zoomLevel < 4) {
+          draft.zoomLevel++
+        }
         return
       case 'decreaseZoomLevel':
+        console.log('current zoom level ', draft.zoomLevel)
+        if (draft.zoomLevel > 0) {
+          draft.zoomLevel--
+        }
+        return
+      case 'resetZoomLevel':
+        console.log('current zoom level ', draft.zoomLevel)
+        draft.zoomLevel = 0
         return
     }
   }
@@ -54,11 +78,6 @@ const App = () => {
   ) : (
     <main>
       <div className="svg-wrapper">
-        <h1 id="title">United States Educational Attainment</h1>
-        <p id="description">
-          Percentage of adults age 25 and older with a bachelor's degree or
-          higher (2010-2014)
-        </p>
         <StateContext.Provider value={state}>
           <DispatchContext.Provider value={dispatch}>
             <ElectionMap
@@ -68,14 +87,11 @@ const App = () => {
               countyData={countyData}
               usMap={usMap}
             />
+            <ZoomControls />
+            <CountyTooltip countyData={countyData} />
+            <StateTooltip stateData={stateData} />
           </DispatchContext.Provider>
         </StateContext.Provider>
-        <div className="source">
-          Source:{' '}
-          <a href="https://www.ers.usda.gov/data-products/county-level-data-sets/download-data.aspx">
-            USDA Economic Research Service
-          </a>
-        </div>
       </div>
     </main>
   )

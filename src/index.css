@@ -2,6 +2,7 @@
   --blue: #1375b7;
   --red: #c93135;
   --light-gray: #d3d3d3;
+  --mid-gray: #6a6c6e;
 }
 /* Franklin Regular */
 @font-face {
@@ -16,6 +17,14 @@
   font-style: normal;
   font-weight: 500;
   src: local('Franklin'), url(./fonts/franklin-normal-500.woff) format('woff');
+}
+
+/* Franklin Semibold */
+@font-face {
+  font-family: 'Franklin';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Franklin'), url(./fonts/franklin-normal-600.woff2) format('woff2');
 }
 
 /* Franklin Bold */
@@ -44,13 +53,14 @@ main {
 
 .svg-wrapper {
   background-color: white;
-  padding: 2rem 4rem;
+  padding: 2rem 1rem;
   text-align: center;
+  position: relative;
 }
 
 .svg-wrapper {
   flex: 1;
-  max-width: 1024px;
+  max-width: 1280px;
 }
 
 #title {
@@ -74,6 +84,18 @@ main {
   font-size: 12px;
 }
 
+.tooltip footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.375rem;
+  gap: 0.125rem;
+}
+#county-tooltip footer {
+  font-size: 11px;
+}
+.tooltip footer :first-child {
+  font-weight: bold;
+}
 .tooltip__table {
   border-collapse: collapse;
   font-weight: 500;
@@ -94,8 +116,9 @@ main {
 }
 
 .tooltip__table th,
-td.party {
-  color: gray;
+td.party,
+.tooltip footer :last-child {
+  color: var(--mid-gray);
   font-weight: 500;
   font-size: 11px;
 }
@@ -103,35 +126,64 @@ td.percentage {
   font-weight: bold;
 }
 td.winner > div {
+  font-weight: 500;
+}
+#state-tooltip td.winner > div {
   color: white;
   display: flex;
   align-items: center;
   gap: 2px;
 }
 td.winner .checkmark {
-  transform: translateY(1px);
+  display: flex;
 }
 td.electoral {
   text-align: center;
 }
 
-td.winner.dem {
+#state-tooltip td.winner.dem {
   background-color: var(--blue);
 }
 
-td.winner.rep {
+#state-tooltip td.winner.rep {
   background-color: var(--red);
 }
 
-td.dem {
-  border-left: 4px solid var(--blue);
-}
+td.dem,
 td.rep {
-  border-left: 4px solid var(--red);
+  position: relative;
+}
+
+td.dem::before,
+td.rep::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: var(--blue);
+}
+td.rep::before {
+  background-color: var(--red);
 }
 .tooltip__table td,
 .tooltip__table th {
   padding: 0.375rem 0.5rem 0.375rem 0.25rem;
+}
+
+#state-tooltip .tooltip__table td.candidate.winner {
+  padding: 0.375rem 0.5rem 0.375rem 0.125rem;
+}
+
+#state-tooltip th:nth-child(2),
+td:nth-child(2) {
+  padding-left: 0.5rem;
+}
+
+.tooltip__table td.candidate {
+  padding: 0.375rem 0.5rem 0.375rem 0.5rem;
 }
 
 .tooltip__table th:first-child {
@@ -174,7 +226,7 @@ tr {
 
 .state-name {
   fill: white;
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Franklin', sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -187,4 +239,32 @@ tr {
 
 .tick {
   font-size: 0.75rem;
+}
+
+#zoom-controls {
+  position: absolute;
+  top: 2rem;
+  left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.zoom-control {
+  background: #999;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.zoom-control:not(:disabled) {
+  cursor: pointer;
+}
+
+.zoom-control:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
 }

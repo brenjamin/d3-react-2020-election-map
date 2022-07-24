@@ -18,15 +18,15 @@ export const StateTooltip = ({ stateData }) => {
     <>
       <td className={winner === 'R' ? 'winner rep candidate' : 'rep candidate'}>
         <div>
-          <span class="checkmark">
+          <span className="checkmark">
             {winner === 'R' ? <BiCheck fill="white" size={15} /> : ''}
           </span>
           <span className="candidate-name">Donald J. Trump*</span>
         </div>
       </td>
-      <td class="party">Rep.</td>
+      <td className="party">Rep.</td>
       <td>{hoveredState.votes_gop.toLocaleString()}</td>
-      <td class="percentage">
+      <td className="percentage">
         <span>
           {Math.abs(hoveredState.per_point_diff) < 0.01
             ? (hoveredState.per_gop * 100).toFixed(2)
@@ -34,7 +34,7 @@ export const StateTooltip = ({ stateData }) => {
         </span>
         {winner === 'R' ? '%' : ''}
       </td>
-      <td class="electoral">
+      <td className="electoral">
         {hoveredState.el_votes_gop ? hoveredState.el_votes_gop : '—'}
       </td>
     </>
@@ -43,15 +43,15 @@ export const StateTooltip = ({ stateData }) => {
     <>
       <td className={winner === 'D' ? 'winner dem candidate' : 'dem candidate'}>
         <div>
-          <span class="checkmark">
+          <span className="checkmark">
             {winner === 'D' ? <BiCheck fill="white" size={15} /> : ''}
           </span>
           <span className="candidate-name">Joseph R. Biden Jr.</span>
         </div>
       </td>
-      <td class="party">Dem.</td>
+      <td className="party">Dem.</td>
       <td>{hoveredState.votes_dem.toLocaleString()}</td>
-      <td class="percentage">
+      <td className="percentage">
         <span>
           {Math.abs(hoveredState.per_point_diff) < 0.01
             ? (hoveredState.per_dem * 100).toFixed(2)
@@ -59,7 +59,7 @@ export const StateTooltip = ({ stateData }) => {
         </span>
         {winner === 'D' ? '%' : ''}
       </td>
-      <td class="electoral">
+      <td className="electoral">
         {hoveredState.el_votes_dem ? hoveredState.el_votes_dem : '—'}
       </td>
     </>
@@ -78,7 +78,7 @@ export const StateTooltip = ({ stateData }) => {
       <p className="tooltip__heading">
         <strong>{hoveredState.state}</strong>
       </p>
-      <table class="tooltip__table">
+      <table className="tooltip__table">
         <thead>
           <tr>
             <th>

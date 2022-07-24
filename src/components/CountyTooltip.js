@@ -20,9 +20,9 @@ export const CountyTooltip = ({ countyData }) => {
           <span className="candidate-name">Donald J. Trump*</span>
         </div>
       </td>
-      <td class="party">Rep.</td>
+      <td className="party">Rep.</td>
       <td>{hoveredCounty.votes_gop.toLocaleString()}</td>
-      <td class="percentage">
+      <td className="percentage">
         <span>
           {Math.abs(hoveredCounty.per_point_diff) < 0.01
             ? (hoveredCounty.per_gop * 100).toFixed(2)
@@ -39,9 +39,9 @@ export const CountyTooltip = ({ countyData }) => {
           <span className="candidate-name">Joseph R. Biden Jr.</span>
         </div>
       </td>
-      <td class="party">Dem.</td>
+      <td className="party">Dem.</td>
       <td>{hoveredCounty.votes_dem.toLocaleString()}</td>
-      <td class="percentage">
+      <td className="percentage">
         <span>
           {Math.abs(hoveredCounty.per_point_diff) < 0.01
             ? (hoveredCounty.per_dem * 100).toFixed(2)
@@ -65,7 +65,7 @@ export const CountyTooltip = ({ countyData }) => {
       <p className="tooltip__heading">
         <strong>{hoveredCounty.county_name}</strong>
       </p>
-      <table class="tooltip__table">
+      <table className="tooltip__table">
         <thead>
           <tr>
             <th>Candidate</th>

@@ -1,9 +1,14 @@
 import { StateMarks } from './StateMarks'
 import { CountyMarks } from './CountyMarks'
-import { select, scaleThreshold, count } from 'd3'
-import { useMemo } from 'react'
+import { select, scaleThreshold, zoom, zoomIdentity } from 'd3'
+import { useMemo, useRef, useEffect, useContext, useState } from 'react'
 import { Legend } from './Legend'
+import { geoPath } from 'd3-geo'
+import StateContext from '../StateContext'
+import DispatchContext from '../DispatchContext'
+import { ZoomControls } from './ZoomControls'
 
+const path = geoPath()
 export const ElectionMap = ({
   width,
   height,
@@ -11,6 +16,35 @@ export const ElectionMap = ({
   countyData,
   usMap
 }) => {
+  const appState = useContext(StateContext)
+  const appDispatch = useContext(DispatchContext)
+  const svg = useRef()
+  const marks = useRef()
+  const _zoom = zoom()
+    .scaleExtent([1, 20])
+    .on('zoom', e => {
+      appDispatch({ type: 'setZoomLevel', value: e.transform.k })
+      select(marks.current).attr('transform', e.transform)
+    })
+
+  useEffect(() => {
+    select(svg.current)
+      .call(_zoom)
+      .on('wheel.zoom', null)
+      .on('mousedown.zoom', null)
+  }, [])
+
+  const disablePan = () => {
+    select(svg.current)
+      .call(_zoom)
+      .on('wheel.zoom', null)
+      .on('mousedown.zoom', null)
+  }
+
+  const enablePan = () => {
+    select(svg.current).call(_zoom).on('wheel.zoom', null)
+  }
+
   const demScale = useMemo(
     () =>
       scaleThreshold()
@@ -27,36 +61,118 @@ export const ElectionMap = ({
     [scaleThreshold]
   )
 
-  // const handleStateMouseMove = useMemo(
-  //   () => (e, id) => {
-  //     select(e.currentTarget).raise()
-  //     e.currentTarget.querySelector('.state').style.stroke = 'black'
-  //     setHoveredState({ id, x: e.pageX, y: e.pageY })
-  //   },
-  //   []
-  // )
+  const handleStateClick = (e, feature) => {
+    enablePan()
+    document.querySelectorAll('.state-wrapper').forEach(el => {
+      el.style.visibility = 'visible'
+    })
+    e.currentTarget.style.visibility = 'hidden'
+    appDispatch({ type: 'updateActiveState', value: feature.id })
 
-  // const handleStateMouseOut = useMemo(
-  //   () => e => {
-  //     e.currentTarget.querySelector('.state').style.stroke = 'white'
-  //   },
-  //   []
-  // )
+    let bounds = path.bounds(feature),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = 0.9 / Math.max(dx / width, dy / height),
+      translate = [width / 2 - scale * x, height / 2 - scale * y]
 
-  const handleCountyMouseOver = useMemo(
-    () => (e, id) => {
-      select(e.currentTarget).raise()
-      e.currentTarget.querySelector('.state').style.stroke = 'black'
-    },
-    []
-  )
+    let transform = zoomIdentity
+      .translate(translate[0], translate[1])
+      .scale(scale)
 
-  const handleCountyMouseOut = useMemo(
-    () => e => {
-      e.currentTarget.querySelector('.state').style.stroke = 'white'
-    },
-    []
-  )
+    select(svg.current)
+      .transition()
+      .duration(750)
+      .call(_zoom.transform, transform)
+
+    appDispatch({ type: 'setZoomLevel', value: scale })
+    appDispatch({
+      type: 'setCenter',
+      value: [x, y]
+    })
+  }
+
+  const handleZoomIn = e => {
+    enablePan()
+    let currentZoom = appState.zoomLevel
+    let newZoom = appState.zoomLevel * 3 > 20 ? 20 : appState.zoomLevel * 3
+
+    let currentCenter = appState.center
+    let newTranslation = [
+      width / 2 - newZoom * currentCenter[0],
+      height / 2 - newZoom * currentCenter[1]
+    ]
+
+    let transform = zoomIdentity
+      .translate(newTranslation[0], newTranslation[1])
+      .scale(newZoom)
+
+    select(svg.current)
+      .transition()
+      .duration(750)
+      .call(_zoom.transform, transform)
+
+    appDispatch({ type: 'setZoomLevel', value: newZoom })
+  }
+
+  const handleDecreaseZoom = () => {
+    let currentZoom = appState.zoomLevel
+    let newZoom =
+      Math.ceil(appState.zoomLevel / 3) === 1
+        ? 1
+        : Math.ceil(appState.zoomLevel / 3)
+    document.querySelectorAll('.state-wrapper').forEach(el => {
+      el.style.visibility = 'visible'
+    })
+    if (newZoom === 1) {
+      disablePan()
+      select(svg.current)
+        .transition()
+        .duration(750)
+        .call(_zoom.transform, zoomIdentity)
+      appDispatch({
+        type: 'setCenter',
+        value: [width / 2, height / 2]
+      })
+    } else {
+      enablePan()
+      let currentCenter = appState.center
+      let newTranslation = [
+        width / 2 - newZoom * currentCenter[0],
+        height / 2 - newZoom * currentCenter[1]
+      ]
+
+      let transform = zoomIdentity
+        .translate(newTranslation[0], newTranslation[1])
+        .scale(newZoom)
+
+      select(svg.current)
+        .transition()
+        .duration(750)
+        .call(_zoom.transform, transform)
+    }
+
+    appDispatch({ type: 'setZoomLevel', value: newZoom })
+  }
+
+  const handleResetZoom = () => {
+    disablePan()
+    select(svg.current).call(_zoom.transform, zoomIdentity)
+
+    appDispatch({ type: 'resetZoomLevel' })
+    document.querySelectorAll('.state-wrapper').forEach(el => {
+      el.style.visibility = 'visible'
+    })
+    appDispatch({
+      type: 'updateActiveState',
+      value: null
+    })
+    appDispatch({
+      type: 'setCenter',
+      value: [width / 2, height / 2]
+    })
+  }
 
   return (
     <>
@@ -65,6 +181,7 @@ export const ElectionMap = ({
         height="100%"
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMinYMin"
+        ref={svg}
       >
         <defs>
           {/* gradients for flipped states */}
@@ -99,28 +216,32 @@ export const ElectionMap = ({
           colorScale={colorScale}
           legendWidth={legendWidth}
         /> */}
-        {useMemo(() => {
-          return (
-            <CountyMarks
-              usMap={usMap}
-              countyData={countyData}
-              demScale={demScale}
-              repScale={repScale}
-              handleCountyMouseOver={handleCountyMouseOver}
-              handleCountyMouseOut={handleCountyMouseOut}
-            />
-          )
-        }, [
-          usMap,
-          countyData,
-          demScale,
-          repScale,
-          handleCountyMouseOver,
-          handleCountyMouseOut
-        ])}
+        <g ref={marks}>
+          {useMemo(() => {
+            return (
+              <CountyMarks
+                usMap={usMap}
+                countyData={countyData}
+                demScale={demScale}
+                repScale={repScale}
+                path={path}
+              />
+            )
+          }, [usMap, countyData, demScale, repScale, path])}
 
-        <StateMarks stateData={stateData} usMap={usMap} />
+          <StateMarks
+            stateData={stateData}
+            usMap={usMap}
+            handleStateClick={handleStateClick}
+            path={path}
+          />
+        </g>
       </svg>
+      <ZoomControls
+        handleZoomIn={handleZoomIn}
+        handleDecreaseZoom={handleDecreaseZoom}
+        handleResetZoom={handleResetZoom}
+      />
     </>
   )
 }

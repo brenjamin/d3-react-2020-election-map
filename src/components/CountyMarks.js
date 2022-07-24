@@ -1,15 +1,15 @@
 import { useMemo, useContext } from 'react'
-import { geoPath } from 'd3-geo'
+
 import { select } from 'd3'
 import StateContext from '../StateContext'
 import DispatchContext from '../DispatchContext'
-const path = geoPath()
 
 export const CountyMarks = ({
   usMap: { counties },
   countyData,
   demScale,
-  repScale
+  repScale,
+  path
 }) => {
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
@@ -17,6 +17,7 @@ export const CountyMarks = ({
     () => e => {
       select(e.currentTarget).raise()
       e.currentTarget.style.stroke = 'black'
+      e.currentTarget.style.strokeWidth = '0.25px'
     },
     []
   )
@@ -32,7 +33,8 @@ export const CountyMarks = ({
 
   const handleCountyMouseOut = useMemo(
     () => e => {
-      e.currentTarget.style.stroke = 'transparent'
+      e.currentTarget.style.stroke = 'white'
+      e.currentTarget.style.strokeWidth = '0.05px'
       select(e.currentTarget).lower()
       appDispatch({
         type: 'updateHoveredCounty',

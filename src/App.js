@@ -20,17 +20,19 @@ const App = () => {
 
   const initialState = {
     hoveredState: {
-      id: '06',
-      x: 300,
-      y: 300
+      id: null,
+      x: null,
+      y: null
     },
     hoveredCounty: {
       id: null,
       x: null,
       y: null
     },
+    center: [width / 2, height / 2],
     activeState: null,
-    zoomLevel: 0
+    zoomLevel: 1,
+    pannable: false
   }
 
   function reducer(draft, action) {
@@ -54,19 +56,28 @@ const App = () => {
         return
       case 'increaseZoomLevel':
         console.log('current zoom level ', draft.zoomLevel)
-        if (draft.zoomLevel < 4) {
+        if (draft.zoomLevel < 21) {
           draft.zoomLevel++
         }
         return
       case 'decreaseZoomLevel':
         console.log('current zoom level ', draft.zoomLevel)
-        if (draft.zoomLevel > 0) {
+        if (draft.zoomLevel > 1) {
           draft.zoomLevel--
         }
         return
       case 'resetZoomLevel':
         console.log('current zoom level ', draft.zoomLevel)
-        draft.zoomLevel = 0
+        draft.zoomLevel = 1
+        return
+      case 'setZoomLevel':
+        draft.zoomLevel = action.value
+        return
+      case 'setCenter':
+        draft.center = action.value
+        return
+      case 'togglePan':
+        draft.pannable = !draft.pannable
         return
     }
   }
@@ -87,7 +98,6 @@ const App = () => {
               countyData={countyData}
               usMap={usMap}
             />
-            <ZoomControls />
             <CountyTooltip countyData={countyData} />
             <StateTooltip stateData={stateData} />
           </DispatchContext.Provider>

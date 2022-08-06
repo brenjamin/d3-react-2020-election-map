@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import { transform } from 'topojson'
+import { useContext, useEffect, useRef, useState } from 'react'
 import StateContext from '../StateContext'
 import { BiCheck } from 'react-icons/bi'
 export const StateTooltip = ({ stateData }) => {
@@ -7,6 +6,27 @@ export const StateTooltip = ({ stateData }) => {
   const activeState = appState.activeState
   let hoveredState
   let winner
+  const tooltip = useRef()
+
+  const [tooltipHeight, setTooltipHeight] = useState(0)
+  const [tooltipX, setTooltipX] = useState(0)
+
+  useEffect(() => {
+    setTooltipHeight(tooltip.current.clientHeight)
+
+    if (appState.hoveredState.id) {
+      let tooltipWidth = tooltip.current.clientWidth
+
+      if (tooltipWidth / 2 + appState.hoveredState.x > window.innerWidth) {
+        setTooltipX(window.innerWidth - tooltipWidth)
+      } else if (appState.hoveredState.x - tooltipWidth / 2 < 0) {
+        setTooltipX(0)
+      } else {
+        setTooltipX(appState.hoveredState.x - tooltipWidth / 2)
+      }
+    }
+  }, [appState])
+
   if (appState.hoveredState.id) {
     hoveredState = stateData.find(
       state => +state.state_fips === +appState.hoveredState.id
@@ -65,55 +85,63 @@ export const StateTooltip = ({ stateData }) => {
     </>
   )
 
-  return hoveredState && !activeState ? (
+  return (
     <div
       id="state-tooltip"
       className="tooltip"
+      ref={tooltip}
       style={{
-        left: appState.hoveredState.x + 5,
-        top: appState.hoveredState.y + 30,
-        transform: 'translateX(-50%)'
+        left: tooltipX,
+        top:
+          appState.hoveredState.y + tooltipHeight + 30 > window.innerHeight
+            ? appState.hoveredState.y - tooltipHeight - 30
+            : appState.hoveredState.y + 30,
+        opacity: hoveredState && !activeState ? 1 : 0
       }}
     >
-      <p className="tooltip__heading">
-        <strong>{hoveredState.state}</strong>
-      </p>
-      <table className="tooltip__table">
-        <thead>
-          <tr>
-            <th>
-              {hoveredState.el_votes_gop + hoveredState.el_votes_dem} electoral
-              votes
-            </th>
-            <th>Party</th>
-            <th style={{ textAlign: 'right' }}>Votes</th>
-            <th style={{ textAlign: 'center' }}>Pct.</th>
-            <th style={{ textAlign: 'center' }}>E.V.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {hoveredState.votes_dem > hoveredState.votes_gop ? (
-              <DemRow winner={winner} />
-            ) : (
-              <RepRow winner={winner} />
-            )}
-          </tr>
-          <tr>
-            {hoveredState.votes_dem < hoveredState.votes_gop ? (
-              <DemRow winner={winner} />
-            ) : (
-              <RepRow winner={winner} />
-            )}
-          </tr>
-        </tbody>
-      </table>
-      <footer>
-        <div>100% of Estimated Votes Reported</div>
-        <div>* Incumbent</div>
-      </footer>
+      {hoveredState && !activeState ? (
+        <>
+          <p className="tooltip__heading">
+            <strong>{hoveredState.state}</strong>
+          </p>
+          <table className="tooltip__table">
+            <thead>
+              <tr>
+                <th>
+                  {hoveredState.el_votes_gop + hoveredState.el_votes_dem}{' '}
+                  electoral votes
+                </th>
+                <th>Party</th>
+                <th style={{ textAlign: 'right' }}>Votes</th>
+                <th style={{ textAlign: 'center' }}>Pct.</th>
+                <th style={{ textAlign: 'center' }}>E.V.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {hoveredState.votes_dem > hoveredState.votes_gop ? (
+                  <DemRow winner={winner} />
+                ) : (
+                  <RepRow winner={winner} />
+                )}
+              </tr>
+              <tr>
+                {hoveredState.votes_dem < hoveredState.votes_gop ? (
+                  <DemRow winner={winner} />
+                ) : (
+                  <RepRow winner={winner} />
+                )}
+              </tr>
+            </tbody>
+          </table>
+          <footer>
+            <div>100% of Estimated Votes Reported</div>
+            <div>* Incumbent</div>
+          </footer>
+        </>
+      ) : (
+        ''
+      )}
     </div>
-  ) : (
-    <></>
   )
 }

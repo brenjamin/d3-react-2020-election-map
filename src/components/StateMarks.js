@@ -1,6 +1,5 @@
 import { useMemo, useContext } from 'react'
 import { select } from 'd3'
-import StateContext from '../StateContext'
 import DispatchContext from '../DispatchContext'
 
 export const StateMarks = ({
@@ -9,14 +8,12 @@ export const StateMarks = ({
   handleStateClick,
   path
 }) => {
-  const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
 
   const handleStateMouseOver = useMemo(
     () => e => {
       select(e.currentTarget).raise()
       e.currentTarget.querySelector('.state').style.stroke = 'black'
-      e.currentTarget.querySelector('.state').style.strokeWidth = '1px'
     },
     []
   )
@@ -24,7 +21,7 @@ export const StateMarks = ({
     () => (e, id) => {
       appDispatch({
         type: 'updateHoveredState',
-        value: { id, x: e.pageX, y: e.pageY }
+        value: { id, x: e.clientX, y: e.clientY }
       })
     },
     [appDispatch]
@@ -33,7 +30,6 @@ export const StateMarks = ({
   const handleStateMouseOut = useMemo(
     () => e => {
       e.currentTarget.querySelector('.state').style.stroke = 'white'
-      e.currentTarget.querySelector('.state').style.strokeWidth = '0.5px'
       appDispatch({
         type: 'updateHoveredState',
         value: { x: null, y: null }
@@ -50,27 +46,30 @@ export const StateMarks = ({
             {states.features.map(feature => {
               console.log('state memo')
               let currentState = stateData.find(
-                state => parseInt(state.state_fips) === parseInt(feature.id)
+                state =>
+                  parseInt(state.state_fips) ===
+                  parseInt(feature.properties.GEOID)
               )
               let flip = currentState.flip
               let winner =
                 currentState.votes_dem > currentState.votes_gop ? 'dem' : 'gop'
               return (
                 <g
-                  className={`state-wrapper${
-                    appState.activeState === feature.id ? ' active' : ''
-                  }`}
+                  className="state-wrapper"
                   onMouseOver={e => handleStateMouseOver(e)}
-                  onMouseMove={e => handleStateMouseMove(e, feature.id)}
+                  onMouseMove={e =>
+                    handleStateMouseMove(e, feature.properties.GEOID)
+                  }
                   onMouseOut={e => handleStateMouseOut(e)}
-                  key={feature.id}
+                  key={feature.properties.GEOID}
                   onClick={e => handleStateClick(e, feature)}
                 >
+                  {console.log('state wrapper memo')}
                   <path
                     className={`state state-${currentState.state_po} ${winner}${
                       flip ? ' flip' : ''
                     }`}
-                    data-fips={feature.id}
+                    data-fips={feature.properties.GEOID}
                     d={path(feature)}
                     stroke="white"
                   />
@@ -93,7 +92,9 @@ export const StateMarks = ({
         states,
         handleStateMouseMove,
         handleStateMouseOut,
-        handleStateMouseOver
+        handleStateMouseOver,
+        handleStateClick,
+        path
       ])}
     </g>
   )

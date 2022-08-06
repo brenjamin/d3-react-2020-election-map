@@ -8,10 +8,8 @@ import { useImmerReducer } from 'use-immer'
 import { StateTooltip } from './components/StateTooltip'
 import { CountyTooltip } from './components/CountyTooltip'
 
-import { ZoomControls } from './components/ZoomControls'
-
-const width = 960
-const height = 600
+const width = 975
+const height = 610
 
 const App = () => {
   const usMap = useUSMap()
@@ -55,19 +53,16 @@ const App = () => {
         draft.activeState = action.value
         return
       case 'increaseZoomLevel':
-        console.log('current zoom level ', draft.zoomLevel)
         if (draft.zoomLevel < 21) {
           draft.zoomLevel++
         }
         return
       case 'decreaseZoomLevel':
-        console.log('current zoom level ', draft.zoomLevel)
         if (draft.zoomLevel > 1) {
           draft.zoomLevel--
         }
         return
       case 'resetZoomLevel':
-        console.log('current zoom level ', draft.zoomLevel)
         draft.zoomLevel = 1
         return
       case 'setZoomLevel':
@@ -85,7 +80,9 @@ const App = () => {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
   return !stateData || !countyData || !usMap ? (
-    <pre>Loading...</pre>
+    <main>
+      <div className="spinner"></div>
+    </main>
   ) : (
     <main>
       <div className="svg-wrapper">

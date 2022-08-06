@@ -1,5 +1,4 @@
 import StateContext from '../StateContext'
-import DispatchContext from '../DispatchContext'
 import { useContext } from 'react'
 import { HiOutlineZoomIn, HiOutlineZoomOut, HiOutlineX } from 'react-icons/hi'
 
@@ -9,7 +8,6 @@ export const ZoomControls = ({
   handleResetZoom
 }) => {
   const appState = useContext(StateContext)
-  const appDispatch = useContext(DispatchContext)
 
   return (
     <div id="zoom-controls">

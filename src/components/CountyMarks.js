@@ -1,7 +1,5 @@
 import { useMemo, useContext } from 'react'
-
 import { select } from 'd3'
-import StateContext from '../StateContext'
 import DispatchContext from '../DispatchContext'
 
 export const CountyMarks = ({
@@ -11,21 +9,20 @@ export const CountyMarks = ({
   repScale,
   path
 }) => {
-  const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
   const handleCountyMouseOver = useMemo(
-    () => e => {
+    () => (e, id) => {
       select(e.currentTarget).raise()
       e.currentTarget.style.stroke = 'black'
       e.currentTarget.style.strokeWidth = '0.25px'
     },
-    []
+    [appDispatch]
   )
   const handleCountyMouseMove = useMemo(
     () => (e, id) => {
       appDispatch({
         type: 'updateHoveredCounty',
-        value: { id, x: e.pageX, y: e.pageY }
+        value: { id, x: e.clientX, y: e.clientY }
       })
     },
     [appDispatch]
@@ -52,7 +49,7 @@ export const CountyMarks = ({
             {counties.features.map(feature => {
               console.log('counties memo')
               const county = countyData.find(
-                county => county.county_fips === feature.id
+                county => county.county_fips === +feature.properties.geoid
               )
               let color
               if (county) {
@@ -67,19 +64,32 @@ export const CountyMarks = ({
               return (
                 <path
                   className="county"
-                  data-fips={feature.id}
+                  data-fips={feature.properties.geoid}
                   fill={color}
                   d={path(feature)}
-                  key={feature.id}
-                  onMouseOver={e => handleCountyMouseOver(e)}
-                  onMouseMove={e => handleCountyMouseMove(e, feature.id)}
+                  key={feature.properties.geoid}
+                  onMouseOver={e =>
+                    handleCountyMouseOver(e, feature.properties.geoid)
+                  }
+                  onMouseMove={e =>
+                    handleCountyMouseMove(e, feature.properties.geoid)
+                  }
                   onMouseOut={e => handleCountyMouseOut(e)}
                 />
               )
             })}
           </>
         )
-      }, [countyData, counties, demScale, repScale])}
+      }, [
+        countyData,
+        counties,
+        demScale,
+        repScale,
+        handleCountyMouseMove,
+        handleCountyMouseOut,
+        handleCountyMouseOver,
+        path
+      ])}
     </>
   )
 }

@@ -1,10 +1,29 @@
-import { useContext } from 'react'
+import { useContext, useRef, useState, useEffect } from 'react'
 import StateContext from '../StateContext'
 export const CountyTooltip = ({ countyData }) => {
   const appState = useContext(StateContext)
 
   let winner
   let hoveredCounty
+  const tooltip = useRef()
+
+  const [tooltipHeight, setTooltipHeight] = useState(0)
+  const [tooltipX, setTooltipX] = useState(0)
+
+  useEffect(() => {
+    setTooltipHeight(tooltip.current.clientHeight)
+
+    if (appState.hoveredCounty.id) {
+      let tooltipWidth = tooltip.current.clientWidth
+      if (tooltipWidth / 2 + appState.hoveredCounty.x > window.innerWidth) {
+        setTooltipX(window.innerWidth - tooltipWidth)
+      } else if (appState.hoveredCounty.x - tooltipWidth / 2 < 0) {
+        setTooltipX(0)
+      } else {
+        setTooltipX(appState.hoveredCounty.x - tooltipWidth / 2)
+      }
+    }
+  }, [appState])
 
   if (appState.hoveredCounty.id) {
     hoveredCounty = countyData.find(
@@ -52,51 +71,59 @@ export const CountyTooltip = ({ countyData }) => {
     </>
   )
 
-  return hoveredCounty ? (
+  return (
     <div
       id="county-tooltip"
       className="tooltip"
+      ref={tooltip}
       style={{
-        left: appState.hoveredCounty.x + 5,
-        top: appState.hoveredCounty.y + 30,
-        transform: 'translateX(-50%)'
+        left: tooltipX,
+        top:
+          appState.hoveredCounty.y + tooltipHeight + 30 > window.innerHeight
+            ? appState.hoveredCounty.y - tooltipHeight - 30
+            : appState.hoveredCounty.y + 30,
+        opacity: hoveredCounty ? 1 : 0
       }}
     >
-      <p className="tooltip__heading">
-        <strong>{hoveredCounty.county_name}</strong>
-      </p>
-      <table className="tooltip__table">
-        <thead>
-          <tr>
-            <th>Candidate</th>
-            <th>Party</th>
-            <th style={{ textAlign: 'right' }}>Votes</th>
-            <th style={{ textAlign: 'center' }}>Pct.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {hoveredCounty.votes_dem > hoveredCounty.votes_gop ? (
-              <DemRow winner={winner} />
-            ) : (
-              <RepRow winner={winner} />
-            )}
-          </tr>
-          <tr>
-            {hoveredCounty.votes_dem < hoveredCounty.votes_gop ? (
-              <DemRow winner={winner} />
-            ) : (
-              <RepRow winner={winner} />
-            )}
-          </tr>
-        </tbody>
-      </table>
-      <footer>
-        <div>100% of Estimated Votes Reported</div>
-        <div>* Incumbent</div>
-      </footer>
+      {hoveredCounty ? (
+        <>
+          <p className="tooltip__heading">
+            <strong>{hoveredCounty.county_name}</strong>
+          </p>
+          <table className="tooltip__table">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Party</th>
+                <th style={{ textAlign: 'right' }}>Votes</th>
+                <th style={{ textAlign: 'center' }}>Pct.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {hoveredCounty.votes_dem > hoveredCounty.votes_gop ? (
+                  <DemRow winner={winner} />
+                ) : (
+                  <RepRow winner={winner} />
+                )}
+              </tr>
+              <tr>
+                {hoveredCounty.votes_dem < hoveredCounty.votes_gop ? (
+                  <DemRow winner={winner} />
+                ) : (
+                  <RepRow winner={winner} />
+                )}
+              </tr>
+            </tbody>
+          </table>
+          <footer>
+            <div>100% of Estimated Votes Reported</div>
+            <div>* Incumbent</div>
+          </footer>
+        </>
+      ) : (
+        ''
+      )}
     </div>
-  ) : (
-    <></>
   )
 }

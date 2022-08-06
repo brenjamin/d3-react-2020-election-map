@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react'
-import { json } from 'd3'
 import { feature } from 'topojson'
+import USMap from '../data/us-map-projected.json'
 
 export const useUSMap = () => {
-  const url =
-    'https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json'
   const [data, setData] = useState()
   useEffect(() => {
-    json(url).then(data => {
-      const { counties, states } = data.objects
-      console.log(states)
-      setData({
-        counties: feature(data, counties),
-        states: feature(data, states)
-      })
+    const { states, counties } = USMap.objects
+    setData({
+      counties: feature(USMap, counties),
+      states: feature(USMap, states)
     })
   }, [])
   return data

@@ -51,6 +51,37 @@ main {
   padding: 1rem;
 }
 
+main#loading {
+  height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 0;
+}
+
+img.spin {
+  display: block;
+  width: 125px;
+  height: auto;
+  animation-name: spin;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .svg-wrapper {
   background-color: white;
   padding: 2rem 1rem;
@@ -71,21 +102,21 @@ main {
   font-size: 1.25rem;
 }
 
-.state {
-  stroke-width: 1px;
-}
-
 .tooltip {
   text-align: left;
-  padding: 0.5rem;
   position: fixed;
-  transition: opacity 0.2s, visibility 0.2s;
-  background-color: white;
   pointer-events: none;
+  font-size: 12px;
+  transition: opacity 0.2s;
+}
+
+.tooltip-inner {
+  padding: 0.5rem;
+
+  background-color: white;
   border-radius: 4px;
   border: 1px solid #c4c4c4;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
 }
 
 .tooltip footer {
@@ -153,6 +184,17 @@ td.electoral {
   background-color: var(--red);
 }
 
+.cities {
+  pointer-events: none;
+}
+
+.city text {
+  font-size: 5px;
+  text-shadow: -0.9px -0.9px 0 #fff, 0.9px -0.9px 0 #fff, -0.9px 0.9px 0 #fff,
+    0.9px 0.9px 0 #fff;
+  font-weight: 600;
+}
+
 td.dem,
 td.rep {
   position: relative;
@@ -203,8 +245,14 @@ tr {
 }
 
 .state-wrapper,
-.county {
+.state,
+.county,
+#top-state {
   cursor: pointer;
+}
+
+.state {
+  stroke: white;
 }
 
 .county {
@@ -276,6 +324,12 @@ tr {
 .zoom-control:disabled {
   opacity: 0.25;
   cursor: not-allowed;
+}
+
+.states-meshed {
+  fill: none;
+  stroke: white;
+  stroke-width: 1;
 }
 
 /* SPINNER */

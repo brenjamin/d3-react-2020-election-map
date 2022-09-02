@@ -100,7 +100,7 @@ export const StateTooltip = ({ stateData }) => {
       }}
     >
       {hoveredState && !activeState ? (
-        <>
+        <div className="tooltip-inner">
           <p className="tooltip__heading">
             <strong>{hoveredState.state}</strong>
           </p>
@@ -138,7 +138,7 @@ export const StateTooltip = ({ stateData }) => {
             <div>100% of Estimated Votes Reported</div>
             <div>* Incumbent</div>
           </footer>
-        </>
+        </div>
       ) : (
         ''
       )}

@@ -16,7 +16,7 @@ export const CountyMarks = ({
       e.currentTarget.style.stroke = 'black'
       e.currentTarget.style.strokeWidth = '0.25px'
     },
-    [appDispatch]
+    []
   )
   const handleCountyMouseMove = useMemo(
     () => (e, id) => {
@@ -45,9 +45,8 @@ export const CountyMarks = ({
     <>
       {useMemo(() => {
         return (
-          <>
+          <g>
             {counties.features.map(feature => {
-              console.log('counties memo')
               const county = countyData.find(
                 county => county.county_fips === +feature.properties.geoid
               )
@@ -78,7 +77,7 @@ export const CountyMarks = ({
                 />
               )
             })}
-          </>
+          </g>
         )
       }, [
         countyData,

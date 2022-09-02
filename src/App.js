@@ -2,6 +2,7 @@ import { useUSMap } from './utils/useUSMap'
 import { ElectionMap } from './components/ElectionMap'
 import { useCountyData } from './utils/useCountyData'
 import { useStateData } from './utils/useStateData'
+import { useCityData } from './utils/useCityData'
 import StateContext from './StateContext'
 import DispatchContext from './DispatchContext'
 import { useImmerReducer } from 'use-immer'
@@ -15,6 +16,7 @@ const App = () => {
   const usMap = useUSMap()
   const countyData = useCountyData()
   const stateData = useStateData()
+  const cityData = useCityData()
 
   const initialState = {
     hoveredState: {
@@ -79,9 +81,14 @@ const App = () => {
 
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
-  return !stateData || !countyData || !usMap ? (
-    <main>
-      <div className="spinner"></div>
+  return !stateData || !countyData || !usMap || !cityData ? (
+    <main id="loading">
+      <img
+        className="spin"
+        src={require('./img/ny-times-logo.png')}
+        alt="New York Times Logo"
+      />
+      <p>Loading...</p>
     </main>
   ) : (
     <main>
@@ -93,6 +100,7 @@ const App = () => {
               height={height}
               stateData={stateData}
               countyData={countyData}
+              cityData={cityData}
               usMap={usMap}
             />
             <CountyTooltip countyData={countyData} />

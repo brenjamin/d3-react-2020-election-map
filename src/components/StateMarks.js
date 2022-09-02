@@ -1,5 +1,4 @@
 import { useMemo, useContext } from 'react'
-import { select } from 'd3'
 import DispatchContext from '../DispatchContext'
 
 export const StateMarks = ({
@@ -12,8 +11,11 @@ export const StateMarks = ({
 
   const handleStateMouseOver = useMemo(
     () => e => {
-      select(e.currentTarget).raise()
-      e.currentTarget.querySelector('.state').style.stroke = 'black'
+      const { currentTarget } = e
+      document
+        .querySelector('#top-state')
+        .setAttribute('href', `#${currentTarget.getAttribute('id')}`)
+      currentTarget.querySelector('.state').style.stroke = 'black'
     },
     []
   )
@@ -27,15 +29,58 @@ export const StateMarks = ({
     [appDispatch]
   )
 
+  const handleStateCopyMouseMove = useMemo(
+    () => e => {
+      appDispatch({
+        type: 'updateHoveredState',
+        value: {
+          id: e.currentTarget.getAttribute('href').replace('#state-', ''),
+          x: e.clientX,
+          y: e.clientY
+        }
+      })
+    },
+    [appDispatch]
+  )
+
+  const handleStateCopyClick = useMemo(
+    () => e => {
+      const id = e.currentTarget.getAttribute('href').replace('#state-', '')
+      const el = document.querySelector(e.currentTarget.getAttribute('href'))
+      e.currentTarget = el
+
+      const feature = states.features.find(
+        feature => +id === +feature.properties.GEOID
+      )
+      handleStateClick(e, feature)
+    },
+    [handleStateClick]
+  )
+
   const handleStateMouseOut = useMemo(
     () => e => {
-      e.currentTarget.querySelector('.state').style.stroke = 'white'
       appDispatch({
         type: 'updateHoveredState',
         value: { x: null, y: null }
       })
+      const { currentTarget } = e
+      currentTarget.querySelector('.state').style.stroke = 'white'
+      document.querySelector('#top-state').setAttribute('href', ``)
     },
     [appDispatch]
+  )
+
+  const handleStateCopyMouseOut = useMemo(
+    () => e => {
+      const { currentTarget } = e
+      const stateWrapper = document.querySelector(
+        currentTarget.getAttribute('href')
+      )
+
+      stateWrapper.querySelector('.state').style.stroke = 'white'
+      e.currentTarget.setAttribute('href', '')
+    },
+    []
   )
 
   return (
@@ -43,12 +88,9 @@ export const StateMarks = ({
       {useMemo(() => {
         return (
           <>
-            {states.features.map(feature => {
-              console.log('state memo')
+            {states.features.map((feature, index) => {
               let currentState = stateData.find(
-                state =>
-                  parseInt(state.state_fips) ===
-                  parseInt(feature.properties.GEOID)
+                state => state.state_fips === +feature.properties.GEOID
               )
               let flip = currentState.flip
               let winner =
@@ -57,21 +99,15 @@ export const StateMarks = ({
                 <g
                   className="state-wrapper"
                   onMouseOver={e => handleStateMouseOver(e)}
-                  onMouseMove={e =>
-                    handleStateMouseMove(e, feature.properties.GEOID)
-                  }
-                  onMouseOut={e => handleStateMouseOut(e)}
                   key={feature.properties.GEOID}
-                  onClick={e => handleStateClick(e, feature)}
+                  id={'state-' + feature.properties.GEOID}
                 >
-                  {console.log('state wrapper memo')}
                   <path
                     className={`state state-${currentState.state_po} ${winner}${
                       flip ? ' flip' : ''
                     }`}
                     data-fips={feature.properties.GEOID}
                     d={path(feature)}
-                    stroke="white"
                   />
                   <text
                     className={`state-name state-name-${currentState.state_po}`}
@@ -85,15 +121,23 @@ export const StateMarks = ({
                 </g>
               )
             })}
+
+            <use
+              id="top-state"
+              href="#state-00"
+              onMouseMove={e => handleStateCopyMouseMove(e)}
+              onClick={e => handleStateCopyClick(e)}
+              onMouseOut={e => handleStateCopyMouseOut(e)}
+            />
           </>
         )
       }, [
         stateData,
         states,
-        handleStateMouseMove,
-        handleStateMouseOut,
         handleStateMouseOver,
-        handleStateClick,
+        handleStateCopyClick,
+        handleStateCopyMouseMove,
+        handleStateCopyMouseOut,
         path
       ])}
     </g>

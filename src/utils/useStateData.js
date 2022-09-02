@@ -14,6 +14,7 @@ export const useStateData = () => {
       d.total_votes = +d.total_votes
       d.votes_dem = +d.votes_dem
       d.votes_gop = +d.votes_gop
+      d.state_fips = +d.state_fips
 
       return d
     }

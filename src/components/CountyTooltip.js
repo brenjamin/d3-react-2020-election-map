@@ -86,7 +86,7 @@ export const CountyTooltip = ({ countyData }) => {
       }}
     >
       {hoveredCounty ? (
-        <>
+        <div className="tooltip-inner">
           <p className="tooltip__heading">
             <strong>{hoveredCounty.county_name}</strong>
           </p>
@@ -120,7 +120,7 @@ export const CountyTooltip = ({ countyData }) => {
             <div>100% of Estimated Votes Reported</div>
             <div>* Incumbent</div>
           </footer>
-        </>
+        </div>
       ) : (
         ''
       )}

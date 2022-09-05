@@ -1,6 +1,6 @@
 {
   "name": "d3-react-2020-election-map",
-  "homepage": "./",
+  "homepage": "https://brenjamin.github.io/d3-react-2020-election-map",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

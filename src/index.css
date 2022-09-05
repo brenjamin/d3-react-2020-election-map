@@ -4,6 +4,8 @@
   --light-gray: #d3d3d3;
   --mid-gray: #6a6c6e;
   --text-gray: #777;
+  --text-gray-dark: #666;
+  --text-gray-light: #999;
 }
 /* Franklin Regular */
 @font-face {
@@ -390,19 +392,23 @@ tr {
   visibility: hidden;
 }
 
-.state.dem {
+.state.dem,
+.legend .dem {
   fill: var(--blue);
 }
 
-.state.gop {
+.state.gop,
+.legend .gop {
   fill: var(--red);
 }
 
-.state.dem.flip {
+.state.dem.flip,
+.legend .dem.flip {
   fill: url(#dem-flip);
 }
 
-.state.gop.flip {
+.state.gop.flip,
+.legend .gop.flip {
   fill: url(#gop-flip);
 }
 
@@ -523,6 +529,22 @@ tr {
 
 .state-name-CT {
   transform: translateY(2px);
+}
+
+/* LEGEND */
+.legend .candidates,
+.legend .labels {
+  font-weight: 500;
+}
+
+.legend .candidates {
+  fill: var(--text-gray-dark);
+  font-size: 13px;
+}
+
+.legend .labels {
+  fill: var(--text-gray-light);
+  font-size: 12px;
 }
 
 /* SPINNER */

@@ -315,6 +315,7 @@ export const ElectionMap = ({
               )
             }, [usMap, cityData])}
           </g>
+          <Legend />
         </g>
       </svg>
       <ZoomControls

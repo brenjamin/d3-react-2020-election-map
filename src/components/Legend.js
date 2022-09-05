@@ -1,37 +1,35 @@
-const LegendAxis = ({ colorScale, legendWidth, legendMarkHeight }) => {
-  const ticks = colorScale.domain()
-  return (
-    <g id="legend-axis">
-      {ticks.map((tick, index) => (
-        <g className="legend-tick" key={tick} transform={`translate(${(index * legendWidth) / (ticks.length - 1)}, 0)`}>
-          <text y={10} dy=".71em" style={{ textAnchor: "middle" }} className="tick">
-            {tick.toFixed(0)}%
-          </text>
-          <line y1={5} y2={-legendMarkHeight} x1="0" x2="0" stroke="black" />
-        </g>
-      ))}
-    </g>
-  )
-}
+import { useContext } from 'react'
+import StateContext from '../StateContext'
 
-const LegendMarks = ({ colorScale, legendWidth, legendMarkHeight }) => {
-  const rects = colorScale.domain().slice()
-  rects.pop()
-  return (
-    <g transform={`translate(0, -${legendMarkHeight})`}>
-      {rects.map((val, index) => {
-        return <rect key={index} fill={colorScale(val)} width={legendWidth / rects.length} height={legendMarkHeight} transform={`translate(${(index * legendWidth) / rects.length},0)`} />
-      })}
-    </g>
-  )
-}
+export const Legend = ({}) => {
+  const appState = useContext(StateContext)
 
-export const Legend = ({ colorScale, width, legendWidth }) => {
-  const legendMarkHeight = 15
   return (
-    <g id="legend" transform={` translate(${width - legendWidth - 100},${legendMarkHeight + 10})`}>
-      <LegendMarks colorScale={colorScale} legendWidth={legendWidth} legendMarkHeight={legendMarkHeight} />
-      <LegendAxis colorScale={colorScale} legendWidth={legendWidth} legendMarkHeight={legendMarkHeight} />
+    <g
+      className="legend"
+      transform="translate(600, 540)"
+      style={{ opacity: appState.activeState ? 0 : 1 }}
+    >
+      <rect className="dem" x="0" y="0" width="45" height="15"></rect>
+      <rect className="dem flip" x="50" y="0" width="45" height="15"></rect>
+      <rect className="gop" x="0" y="20" width="45" height="15"></rect>
+      <rect className="gop flip" x="50" y="20" width="45" height="15"></rect>
+      <g className="candidates">
+        <text x="100" y="12">
+          Biden
+        </text>
+        <text x="100" y="32">
+          Trump
+        </text>
+      </g>
+      <g className="labels">
+        <text x="12" y="50">
+          Win
+        </text>
+        <text x="63" y="50">
+          Flip
+        </text>
+      </g>
     </g>
   )
 }

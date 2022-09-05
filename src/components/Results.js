@@ -25,7 +25,7 @@ export const Results = ({ stateData }) => {
           <p>{elVotesDem}</p>
           <p>
             Joseph R. Biden Jr.{' '}
-            <span class="results__checkmark">
+            <span className="results__checkmark">
               <BiCheck fill="white" size={20} />
             </span>
           </p>
@@ -42,11 +42,11 @@ export const Results = ({ stateData }) => {
             width: `${(elVotesDem / (elVotesGop + elVotesDem)) * 100}%`
           }}
         ></div>
-        <div class="results__bar-midpoint">
+        <div className="results__bar-midpoint">
           <span>
             270
             <br />
-            <span class="results__bar--sm">to win</span>
+            <span className="results__bar--sm">to win</span>
           </span>
         </div>
         <div

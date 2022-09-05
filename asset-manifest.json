@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "./static/css/main.b1a6b5b2.css",
-    "main.js": "./static/js/main.477d775e.js",
-    "static/js/787.098b3296.chunk.js": "./static/js/787.098b3296.chunk.js",
-    "static/media/2020 Presidential Election - Results by County.csv": "./static/media/2020 Presidential Election - Results by County.b88d8aae7e5c836e566b.csv",
-    "static/media/franklin-normal-400.woff": "./static/media/franklin-normal-400.c91cbb9ef80fbea395f5.woff",
-    "static/media/ny-times-logo.png": "./static/media/ny-times-logo.1b658265f7b135ff8ab3.png",
-    "static/media/franklin-normal-500.woff": "./static/media/franklin-normal-500.a6bcdee022778d38533f.woff",
-    "static/media/franklin-normal-700.woff2": "./static/media/franklin-normal-700.ef7b390421198f968692.woff2",
-    "static/media/franklin-normal-600.woff2": "./static/media/franklin-normal-600.c235fa5b7da540e57e0f.woff2",
-    "static/media/us-cities.csv": "./static/media/us-cities.515d5ce7c9428032e9e0.csv",
-    "static/media/2020 Presidential Election - Results by State.csv": "./static/media/2020 Presidential Election - Results by State.f8ce93b544dbf1d9097d.csv",
-    "index.html": "./index.html",
-    "main.b1a6b5b2.css.map": "./static/css/main.b1a6b5b2.css.map",
-    "main.477d775e.js.map": "./static/js/main.477d775e.js.map",
-    "787.098b3296.chunk.js.map": "./static/js/787.098b3296.chunk.js.map"
+    "main.css": "/d3-react-2020-election-map/static/css/main.29f1c3dc.css",
+    "main.js": "/d3-react-2020-election-map/static/js/main.7f4423de.js",
+    "static/js/787.098b3296.chunk.js": "/d3-react-2020-election-map/static/js/787.098b3296.chunk.js",
+    "static/media/2020 Presidential Election - Results by County.csv": "/d3-react-2020-election-map/static/media/2020 Presidential Election - Results by County.b88d8aae7e5c836e566b.csv",
+    "static/media/franklin-normal-400.woff": "/d3-react-2020-election-map/static/media/franklin-normal-400.c91cbb9ef80fbea395f5.woff",
+    "static/media/ny-times-logo.png": "/d3-react-2020-election-map/static/media/ny-times-logo.1b658265f7b135ff8ab3.png",
+    "static/media/franklin-normal-500.woff": "/d3-react-2020-election-map/static/media/franklin-normal-500.a6bcdee022778d38533f.woff",
+    "static/media/franklin-normal-700.woff2": "/d3-react-2020-election-map/static/media/franklin-normal-700.ef7b390421198f968692.woff2",
+    "static/media/franklin-normal-600.woff2": "/d3-react-2020-election-map/static/media/franklin-normal-600.c235fa5b7da540e57e0f.woff2",
+    "static/media/us-cities.csv": "/d3-react-2020-election-map/static/media/us-cities.515d5ce7c9428032e9e0.csv",
+    "static/media/2020 Presidential Election - Results by State.csv": "/d3-react-2020-election-map/static/media/2020 Presidential Election - Results by State.f8ce93b544dbf1d9097d.csv",
+    "index.html": "/d3-react-2020-election-map/index.html",
+    "main.29f1c3dc.css.map": "/d3-react-2020-election-map/static/css/main.29f1c3dc.css.map",
+    "main.7f4423de.js.map": "/d3-react-2020-election-map/static/js/main.7f4423de.js.map",
+    "787.098b3296.chunk.js.map": "/d3-react-2020-election-map/static/js/787.098b3296.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b1a6b5b2.css",
-    "static/js/main.477d775e.js"
+    "static/css/main.29f1c3dc.css",
+    "static/js/main.7f4423de.js"
   ]
 }

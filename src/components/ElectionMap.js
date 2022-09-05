@@ -1,15 +1,6 @@
 import { StateMarks } from './StateMarks'
 import { CountyMarks } from './CountyMarks'
-import {
-  select,
-  scaleThreshold,
-  zoom,
-  zoomIdentity,
-  pointer,
-  easeExpInOut,
-  easeLinear,
-  easeQuadIn
-} from 'd3'
+import { select, scaleThreshold, zoom, zoomIdentity, easeQuadIn } from 'd3'
 import { useMemo, useRef, useEffect, useContext } from 'react'
 import { Legend } from './Legend'
 import { geoAlbersUsa, geoPath } from 'd3-geo'
@@ -84,7 +75,6 @@ export const ElectionMap = ({
 
   const handleStateClick = useMemo(
     () => (e, feature) => {
-      e.stopPropagation()
       if (!appState.pannable) {
         enablePan()
       }
@@ -96,7 +86,7 @@ export const ElectionMap = ({
       e.currentTarget.style.visibility = 'hidden'
       appDispatch({
         type: 'updateActiveState',
-        value: feature.properties.GEOID
+        value: +feature.properties.GEOID
       })
 
       let bounds = path.bounds(feature),
@@ -111,23 +101,15 @@ export const ElectionMap = ({
         .translate(translate[0], translate[1])
         .scale(scale)
 
-      // const [[x0, y0], [x1, y1]] = path.bounds(feature)
-      // let scale = Math.min(
-      //   8,
-      //   0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)
-      // )
-      // let x = -(x0 + x1) / 2
-      // let y = -(y0 + y1) / 2
-      // let transform = zoomIdentity
-      //   .translate(width / 2, height / 2)
-      //   .scale(scale)
-      //   .translate(x, y)
-
       select(svg.current)
         .transition()
         .ease(easeQuadIn)
-        .duration(750)
+        .duration(150)
         .call(_zoom.transform, transform)
+
+      document.querySelectorAll('.state').forEach(el => {
+        el.style.strokeWidth = (1 / scale) * 2
+      })
 
       appDispatch({ type: 'setZoomLevel', value: scale })
       appDispatch({
@@ -159,6 +141,10 @@ export const ElectionMap = ({
         .transition()
         .duration(750)
         .call(_zoom.transform, transform)
+
+      document.querySelectorAll('.state').forEach(el => {
+        el.style.strokeWidth = (1 / newZoom) * 2
+      })
 
       appDispatch({ type: 'setZoomLevel', value: newZoom })
     },
@@ -202,6 +188,10 @@ export const ElectionMap = ({
           .transition()
           .duration(750)
           .call(_zoom.transform, transform)
+
+        document.querySelectorAll('.state').forEach(el => {
+          el.style.strokeWidth = 1
+        })
       }
 
       appDispatch({ type: 'setZoomLevel', value: newZoom })
@@ -226,6 +216,9 @@ export const ElectionMap = ({
         type: 'setCenter',
         value: [width / 2, height / 2]
       })
+      document.querySelectorAll('.state').forEach(el => {
+        el.style.strokeWidth = 1
+      })
     },
     [appDispatch, _zoom, disablePan, height, width]
   )
@@ -235,6 +228,9 @@ export const ElectionMap = ({
       appDispatch({
         type: 'updateHoveredState',
         value: { id: null, x: null, y: null }
+      })
+      document.querySelectorAll('.state').forEach(el => {
+        el.style.stroke = 'white'
       })
     },
     [appDispatch]
@@ -295,6 +291,20 @@ export const ElectionMap = ({
                 />
               )
             }, [usMap, countyData, demScale, repScale])}
+            <g>
+              {useMemo(() => {
+                return (
+                  <StateMarks
+                    stateData={stateData}
+                    usMap={usMap}
+                    handleStateClick={handleStateClick}
+                    path={path}
+                  />
+                )
+              }, [usMap, stateData])}
+            </g>
+          </g>
+          <g>
             {useMemo(() => {
               return (
                 <CityMarks
@@ -304,16 +314,6 @@ export const ElectionMap = ({
                 />
               )
             }, [usMap, cityData])}
-            {useMemo(() => {
-              return (
-                <StateMarks
-                  stateData={stateData}
-                  usMap={usMap}
-                  handleStateClick={handleStateClick}
-                  path={path}
-                />
-              )
-            }, [usMap, stateData])}
           </g>
         </g>
       </svg>

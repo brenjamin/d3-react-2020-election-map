@@ -1,4 +1,5 @@
 import { useUSMap } from './utils/useUSMap'
+import { Results } from './components/Results'
 import { ElectionMap } from './components/ElectionMap'
 import { useCountyData } from './utils/useCountyData'
 import { useStateData } from './utils/useStateData'
@@ -92,6 +93,7 @@ const App = () => {
     </main>
   ) : (
     <main>
+      <Results stateData={stateData} />
       <div className="svg-wrapper">
         <StateContext.Provider value={state}>
           <DispatchContext.Provider value={dispatch}>

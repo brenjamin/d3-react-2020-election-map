@@ -3,6 +3,7 @@
   --red: #c93135;
   --light-gray: #d3d3d3;
   --mid-gray: #6a6c6e;
+  --text-gray: #777;
 }
 /* Franklin Regular */
 @font-face {
@@ -46,9 +47,12 @@ p {
 
 main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin: auto;
   padding: 1rem;
+  max-width: 1100px;
 }
 
 main#loading {
@@ -56,13 +60,13 @@ main#loading {
   align-items: center;
   flex-direction: column;
   gap: 2rem;
-  margin: 0;
 }
 
 img.spin {
   display: block;
   width: 125px;
   height: auto;
+  margin: 0 auto;
   animation-name: spin;
   animation-duration: 0.6s;
   animation-iteration-count: infinite;
@@ -82,16 +86,129 @@ img.spin {
   }
 }
 
+/* RESULTS BAR */
+.results {
+  width: 100%;
+}
+.results__electoral,
+.results__popular {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.results__electoral--dem {
+  color: var(--blue);
+}
+
+.results__electoral--dem > p:first-child,
+.results__electoral--gop > p:first-child {
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 0.9;
+}
+.results__electoral--dem > p:last-child,
+.results__electoral--gop > p:last-child {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+@media (min-width: 500px) {
+  .results__electoral--dem > p:first-child,
+  .results__electoral--gop > p:first-child {
+    font-size: 48px;
+  }
+  .results__electoral--dem > p:last-child,
+  .results__electoral--gop > p:last-child {
+    font-weight: 700;
+    font-size: 18px;
+  }
+}
+
+.results__electoral--gop {
+  color: var(--red);
+  text-align: right;
+}
+
+.results__checkmark {
+  display: inline-flex;
+  height: 18px;
+  width: 18px;
+  background-color: var(--blue);
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  position: relative;
+  transform: translate(2px, 3px);
+}
+
+.results__bar {
+  height: 12px;
+  display: flex;
+  position: relative;
+}
+.results__bar--dem,
+.results__bar--gop {
+  height: 100%;
+}
+.results__bar--dem {
+  background-color: var(--blue);
+}
+
+.results__bar--gop {
+  background-color: var(--red);
+}
+
+.results__bar-midpoint {
+  text-transform: uppercase;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: 600;
+  line-height: 1;
+  padding-top: 20px;
+}
+
+.results__bar-midpoint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 16px;
+  background-color: black;
+}
+
+.results__bar--sm {
+  font-size: 12px;
+}
+
+.results__bar,
+.results__popular {
+  margin-top: 0.375rem;
+}
+
+.results__popular,
+.results__bar-midpoint {
+  font-size: 13.5px;
+  color: var(--text-gray);
+  font-weight: 500;
+}
+/* MAP */
+
 .svg-wrapper {
   background-color: white;
-  padding: 2rem 1rem;
+  margin: 1rem 1rem 2rem;
   text-align: center;
   position: relative;
 }
 
 .svg-wrapper {
   flex: 1;
-  max-width: 1280px;
+  width: 100%;
 }
 
 #title {
@@ -193,6 +310,14 @@ td.electoral {
   text-shadow: -0.9px -0.9px 0 #fff, 0.9px -0.9px 0 #fff, -0.9px 0.9px 0 #fff,
     0.9px 0.9px 0 #fff;
   font-weight: 600;
+}
+.city {
+  opacity: 0;
+  transition: none;
+}
+.city.show {
+  opacity: 1;
+  transition: opacity 0.3s;
 }
 
 td.dem,
@@ -330,6 +455,74 @@ tr {
   fill: none;
   stroke: white;
   stroke-width: 1;
+}
+
+/* State-specific styles */
+.state-name-NH,
+.state-name-CT,
+.state-name-MA,
+.state-name-MD {
+  font-size: 10px;
+}
+.state-name-HI,
+.state-name-NJ,
+.state-name-DE,
+.state-name-RI {
+  fill: black;
+}
+.state-name-WA,
+.state-name-TN,
+.state-name-KY {
+  transform: translateY(5px);
+}
+
+.state-name-CA {
+  transform: translateX(-5px);
+}
+
+.state-name-HI {
+  transform: translateX(40px);
+}
+
+.state-name-FL {
+  transform: translateX(10px);
+}
+
+.state-name-LA {
+  transform: translateX(-10px);
+}
+
+.state-name-ID {
+  transform: translateY(10px);
+}
+
+.state-name-DC {
+  opacity: 0;
+}
+
+.state-name-MD {
+  transform: translate(-4px, -2px);
+}
+
+.state-name-DE,
+.state-name-NJ {
+  transform: translate(23px, 5px);
+}
+
+.state-name-MI {
+  transform: translate(15px, 25px);
+}
+
+.state-name-RI {
+  transform: translate(10px, 18px);
+}
+
+.state-name-MA {
+  transform: translateY(1px);
+}
+
+.state-name-CT {
+  transform: translateY(2px);
 }
 
 /* SPINNER */

@@ -45,7 +45,7 @@ export const CountyMarks = ({
     <>
       {useMemo(() => {
         return (
-          <g>
+          <>
             {counties.features.map(feature => {
               const county = countyData.find(
                 county => county.county_fips === +feature.properties.geoid
@@ -77,7 +77,7 @@ export const CountyMarks = ({
                 />
               )
             })}
-          </g>
+          </>
         )
       }, [
         countyData,

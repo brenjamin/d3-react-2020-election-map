@@ -8,6 +8,7 @@ export const useCityData = () => {
     const row = d => {
       d.lat = +d.lat
       d.lon = +d.lon
+      d.state_fips = +d.state_fips
 
       return d
     }

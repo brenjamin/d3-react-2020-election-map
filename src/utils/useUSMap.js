@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { feature, mesh } from 'topojson'
+import { feature } from 'topojson'
 import USMap from '../data/us-map.json'
 
 export const useUSMap = () => {

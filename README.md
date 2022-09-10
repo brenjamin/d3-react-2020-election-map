@@ -1,10 +1,40 @@
 # NY Times 2020 Presidential Election Map Clone: D3 & React
 
-A clone of the NY Time's 2020 Presidential Election Map made with D3 & React.
+A clone of the NY Time's 2020 Presidential Election Map made with D3, React, & SVG.
 
-[Link to the map on the NY Time's website](https://www.nytimes.com/interactive/2020/11/03/us/elections/results-president.html).
+- [View project](https://brenjamin.github.io/d3-react-2020-election-map).
+- [Link to the map on the NY Time's website](https://www.nytimes.com/interactive/2020/11/03/us/elections/results-president.html).
 
-[View project](https://brenjamin.github.io/d3-react-2020-election-map).
+## Election Data (./src/data)
+
+- County-level data adapted from [tonmcg's repository](https://github.com/tonmcg/US_County_Level_Election_Results_08-20) on creating maps from election results
+- State-level data adapted from [MIT's Election Data](https://electionlab.mit.edu/data)
+
+## Map Data (./src/data)
+
+- County and Alaska Election District topojson created using mapshaper following the instructions in [tonmcg's repository](https://github.com/tonmcg/US_County_Level_Election_Results_08-20)
+- State topojson created with mapshaper using state .shp files from the [census.gov website](https://www2.census.gov/geo/tiger/GENZ2019/shp/)
+- City data adapted from [nicolaskruchten's top 1000 most populous US Cities data](https://github.com/plotly/datasets/blob/master/us-cities-top-1k.csv)
+
+## Creating the map
+
+I combined the unprojected state and county map geojson data into a single topojson file (.src/data/us-map.json), which is imported into the useUSMap.js file, and loaded in the main App.js file.
+
+I had trouble pre-projecting the state and county data in a way that worked with the city data, so I ended up using the following projection for states, counties, and cities within the App itself (./components/ElectionMap):
+
+<code>const projection = geoAlbersUsa().scale(1300).translate([487.5, 305])</code>
+
+I based this on the projection used in the [US Atlas TopoJSON repository](https://github.com/topojson/us-atlas).
+
+## Other Helpful Resources
+
+Some other resources that were helpful when I built this project include:
+
+- [Mike Bostock's Command Line Cartography](https://medium.com/@mbostock/command-line-cartography-part-1-897aa8f8ca2c)
+- [Converting a Shapefile to TopoJSON for D3.js](https://github.com/MAPC/infrastructure/blob/master/docs/D3%20Map%20Setup.md)
+- [How to Scale/Choose D3 Projection Settings from .shp File](https://stackoverflow.com/questions/48270218/how-to-scale-choose-d3-projection-settings-from-shp-file)
+- [Mapshaper](https://mapshaper.org/)
+- [Mapshaper Command Reference](https://github.com/mbloch/mapshaper/wiki/Command-Reference)
 
 ## Getting Started with Create React App
 

@@ -35,6 +35,7 @@ Some other resources that were helpful when I built this project include:
 - [How to Scale/Choose D3 Projection Settings from .shp File](https://stackoverflow.com/questions/48270218/how-to-scale-choose-d3-projection-settings-from-shp-file)
 - [Mapshaper](https://mapshaper.org/)
 - [Mapshaper Command Reference](https://github.com/mbloch/mapshaper/wiki/Command-Reference)
+- Using D3, React, & SVG to create data visualizations based on [Curran Kelleher's course](https://www.youtube.com/watch?v=2LhoCfjm8R4)
 
 ## Getting Started with Create React App
 

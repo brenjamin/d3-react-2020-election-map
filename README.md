@@ -1,9 +1,9 @@
 # NY Times 2020 Presidential Election Map Clone: D3 & React
 
-A clone of the NY Time's 2020 Presidential Election Map made with D3, React, & SVG.
+A clone of the NY Times' 2020 Presidential Election Map made with D3, React, & SVG.
 
 - [View project](https://brenjamin.github.io/d3-react-2020-election-map).
-- [Link to the map on the NY Time's website](https://www.nytimes.com/interactive/2020/11/03/us/elections/results-president.html).
+- [Link to the map on the NY Times' website](https://www.nytimes.com/interactive/2020/11/03/us/elections/results-president.html).
 
 ## Election Data (./src/data)
 
